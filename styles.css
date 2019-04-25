@@ -133,6 +133,11 @@ footer {
     margin-top: auto;
 
     font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+footer > a {
+    color: #616161;
 }
 
 footer > a:visited {
