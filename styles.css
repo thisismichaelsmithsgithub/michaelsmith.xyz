@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 html {
+    box-sizing: border-box;
     height: 100%;
 }
 
@@ -88,7 +89,7 @@ nav > ul > li:not(:first-child) {
     font-weight: 500;
     color: rgba(36, 136, 201, 1);
 
-    padding: 0.25em 0.25em;
+    padding: 0.25em;
     border: 1px solid rgba(36, 136, 201, 0.75);
     border-radius: 3px;
 
@@ -97,6 +98,25 @@ nav > ul > li:not(:first-child) {
 
 .resume-link:hover {
     border-color: rgba(36, 136, 201, 1);
+}
+
+.github-link, .linked-in-link {
+    color: #616161;
+
+    padding: 0.25em;
+    border: 1px solid rgba(97, 97, 97, 0.75);
+    border-radius: 3px;
+
+    transition: color 0.1s ease-in-out,
+                border 0.1s ease-in-out;
+}
+
+.github-link:visited, .linked-in-link:visited {
+    color: #616161;
+}
+
+.github-link:hover, .linked-in-link:hover {
+    color: rgba(36, 136, 201, 1);
 }
 
 
@@ -111,6 +131,9 @@ nav > ul > li:not(:first-child) {
     nav > ul > li:not(:first-child) {
         margin-top: 0;
         margin-left: 0.5rem;
+
+        display: inline-flex;
+        align-items: center;
     }
 
     nav > ul > li:not(:last-child)::after {
@@ -121,6 +144,16 @@ nav > ul > li:not(:first-child) {
     .mail-link {
         padding: 0;
         border: none;
+    }
+
+    .responsive-link-text {
+        display: none;
+    }
+
+    .linked-in-link, .github-link {
+        font-size: 1.75rem;
+        border: none;
+        padding: 0;
     }
 }
 
