@@ -14,6 +14,17 @@ jobs:
             - ./*.css
             - ./*.js
 
+  test:
+    docker:
+      - image: cibuilds/hugo:latest
+    working_directory: ~/michaelsmith.xyz
+    steps:
+      - attach_workspace:
+          at: ~/michaelsmith.xyz
+      - run:
+          name: Test html
+          command: htmlproofer --disable-external --check-html .
+
   deploy:
     docker:
       - image: cibuilds/hugo:latest
@@ -25,7 +36,7 @@ jobs:
           fingerprints:
             - "ce:33:23:22:42:a5:9c:8a:79:31:57:12:30:5a:ca:15"
       - run:
-          name: Keyscan Web Server
+          name: Keyscan target server
           command: ssh-keyscan -H -p $SSH_PORT $DEPLOY_HOST >> ~/.ssh/known_hosts
       - deploy:
           name: deploy
@@ -41,6 +52,9 @@ workflows:
   build_and_deploy:
     jobs:
       - build
+      - test:
+          requires:
+            - build
       - deploy:
           context: Web Server Prod
           filters:
@@ -48,3 +62,4 @@ workflows:
               only: master
           requires:
             - build
+            - test
