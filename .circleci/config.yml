@@ -15,6 +15,10 @@ jobs:
       - run:
           name: Test html
           command: htmlproofer --disable-external --check-html src/
+          environment:
+            LANG: en_US.UTF-8
+            LANGUAGE: en_US.UTF-8
+            LC_ALL: en_US.UTF-8
 
   package:
     docker:
