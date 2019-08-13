@@ -1,28 +1,10 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: ubuntu:18.04
-    working_directory: ~/michaelsmith.xyz
-    steps:
-      - checkout
-      - run:
-          name: install ca-certificates
-          command: |
-            apt-get -y update
-            apt-get -y install ca-certificates
-      - persist_to_workspace:
-          root: .
-          paths:
-            - src/*
-
   test:
     docker:
       - image: ubuntu:18.04
     working_directory: ~/michaelsmith.xyz
     steps:
-      - attach_workspace:
-          at: ~/michaelsmith.xyz
       - run:
           name: install htmlproofer
           command: |
@@ -31,7 +13,7 @@ jobs:
               gem install html-proofer
       - run:
           name: Test html
-          command: htmlproofer --disable-external --check-html .
+          command: htmlproofer --disable-external --check-html src/
 
   package:
     docker:
@@ -40,8 +22,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
-      - attach_workspace:
-          at: ~/michaelsmith.xyz
+      - checkout
       - run: |
           TAG=$CIRCLE_BRANCH
           docker build -t michaelsmithxyz/michaelsmith.xyz:$TAG .
@@ -53,11 +34,6 @@ jobs:
       - image: ubuntu:18.04
     working_directory: ~/michaelsmith.xyz
     steps:
-      - run:
-          name: install ca-certificates
-          command: |
-            apt-get -y update
-            apt-get -y install ca-certificates
       - add_ssh_keys:
           fingerprints:
             - "ce:33:23:22:42:a5:9c:8a:79:31:57:12:30:5a:ca:15"
@@ -73,14 +49,10 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
       - package:
           context: docker michaelsmithxyz
           requires:
-            - build
             - test
       - deploy:
           context: Web Server Prod
@@ -88,6 +60,5 @@ workflows:
             branches:
               only: master
           requires:
-            - build
             - test
             - package
