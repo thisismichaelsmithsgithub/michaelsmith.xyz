@@ -5,6 +5,7 @@ jobs:
       - image: ubuntu:18.04
     working_directory: ~/michaelsmith.xyz
     steps:
+      - checkout
       - run:
           name: install htmlproofer
           command: |
