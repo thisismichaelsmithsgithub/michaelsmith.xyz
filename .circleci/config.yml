@@ -9,7 +9,7 @@ jobs:
           name: install htmlproofer
           command: |
               apt-get -y update
-              apt-get -y install build-essential ruby-dev zlib1g-dev ca-certificates
+              apt-get -y install build-essential ruby-dev zlib1g-dev ca-certificates curl
               gem install html-proofer
       - run:
           name: Test html
