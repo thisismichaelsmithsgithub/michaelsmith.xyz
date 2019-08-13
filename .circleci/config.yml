@@ -29,7 +29,7 @@ jobs:
           docker_layer_caching: true
       - checkout
       - run: |
-          TAG=$CIRCLE_BRANCH
+          TAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//-/g')
           docker build -t michaelsmithxyz/michaelsmith.xyz:$TAG .
           echo "$DOCKER_PASS" | docker login -u $DOCKER_USER --password-stdin
           docker push michaelsmithxyz/michaelsmith.xyz:$TAG
