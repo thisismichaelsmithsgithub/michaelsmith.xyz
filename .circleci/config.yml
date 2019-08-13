@@ -1,65 +1,74 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      - image: cibuilds/hugo:latest
+      - image: ubuntu:18.04
     working_directory: ~/michaelsmith.xyz
     steps:
       - checkout
-      - persist_to_workspace:
-          root: .
-          paths:
-            - ./*.html
-            - files/
-            - ./*.css
-            - ./*.js
-
-  test:
-    docker:
-      - image: cibuilds/hugo:latest
-    working_directory: ~/michaelsmith.xyz
-    steps:
-      - attach_workspace:
-          at: ~/michaelsmith.xyz
+      - run:
+          name: install htmlproofer
+          command: |
+              apt-get -y update
+              apt-get -y install build-essential ruby-dev zlib1g-dev ca-certificates curl
+              gem install html-proofer
       - run:
           name: Test html
-          command: htmlproofer --disable-external --check-html .
+          command: htmlproofer --disable-external --check-html src/
+          environment:
+            LANG: C.UTF-8
+            LANGUAGE: C.UTF-8
+            LC_ALL: C.UTF-8
 
-  deploy:
+  package:
     docker:
-      - image: cibuilds/hugo:latest
+        - image: docker:stable
     working_directory: ~/michaelsmith.xyz
     steps:
-      - attach_workspace:
-          at: ~/michaelsmith.xyz
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run: |
+          TAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//-/g')
+          docker build -t michaelsmithxyz/michaelsmith.xyz:$TAG .
+          echo "$DOCKER_PASS" | docker login -u $DOCKER_USER --password-stdin
+          docker push michaelsmithxyz/michaelsmith.xyz:$TAG
+      
+  deploy:
+    docker:
+      - image: ubuntu:18.04
+    working_directory: ~/michaelsmith.xyz
+    steps:
+      - run:
+        name: install ssh
+        command: |
+            apt-get -y update
+            apt-get -y install ssh
       - add_ssh_keys:
           fingerprints:
             - "ce:33:23:22:42:a5:9c:8a:79:31:57:12:30:5a:ca:15"
       - run:
-          name: Keyscan target server
+          name: keyscan target server
           command: ssh-keyscan -H -p $SSH_PORT $DEPLOY_HOST >> ~/.ssh/known_hosts
       - deploy:
           name: deploy
           command: |
-              if [ "${CIRCLE_BRANCH}" = "master" ]; then
-                rsync -Oavce "ssh -p ${SSH_PORT}" ./* $DEPLOY_USER@$DEPLOY_HOST:$SITE_PATH
-              else
-                echo "Not master branch, dry run only"
-              fi
+              ssh -p $SSH_PORT $DEPLOY_USER@$DEPLOY_HOST 'bash ./deploy_michaelsmith.sh'
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
-      - test:
+      - test
+      - package:
+          context: docker michaelsmithxyz
           requires:
-            - build
+            - test
       - deploy:
           context: Web Server Prod
           filters:
             branches:
               only: master
           requires:
-            - build
             - test
+            - package
