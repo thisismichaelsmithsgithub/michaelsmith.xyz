@@ -1,16 +1,19 @@
 trigger:
-- master
+  - '*'
 
 resources:
 - repo: self
 
 variables:
-  tag: '$(Build.SourceVersion)'
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/head/master') }}:
+    tag: 'master'
+  ${{ if ne(variables['Build.SourceBranch'], 'refs/head/master') }}:
+    tag: '$(Build.SourceVersion)'
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:  
+- stage: BuildAndDeploy
+  displayName: Build and deploy image
+  jobs: 
   - job: Build
     displayName: Build
     pool:
@@ -24,6 +27,13 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
+
+  - job: Deploy
+    displayName: Deploy
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - task: InstallSSHKey@0
       inputs:
         knownHostsEntry: '$(knownHostsEntry)'
