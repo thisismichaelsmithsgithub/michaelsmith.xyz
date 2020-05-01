@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: '$(Build.SourceVersion)'
 
 stages:
 - stage: Build
@@ -17,10 +17,15 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build and push Docker image
       inputs:
         containerRegistry: 'Docker Hub - michaelsmithxyz'
         repository: '$(imageRepository)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
+    - task: InstallSSHKey@0
+      inputs:
+        knownHostsEntry: '$(knownHostsEntry)'
+        sshPublicKey: '$(sshPublicKey)'
+        sshKeySecureFile: '$(sshKeySecureFile)'
