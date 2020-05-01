@@ -1,0 +1,45 @@
+trigger:
+  - '*'
+
+resources:
+- repo: self
+
+variables:
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/head/master') }}:
+    tag: 'master'
+  ${{ if ne(variables['Build.SourceBranch'], 'refs/head/master') }}:
+    tag: '$(Build.SourceVersion)'
+
+stages:
+- stage: Build
+  displayName: Build and publish
+  jobs: 
+  - job: Build
+    displayName: Build and publish Docker image
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: Build and push Docker image
+      inputs:
+        containerRegistry: 'Docker Hub - michaelsmithxyz'
+        repository: '$(imageRepository)'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+
+- stage: DeployProduction
+  displayName: Deploy - Production
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Deploy
+    displayName: Deploy to production
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: '$(deploySshEndpoint)'
+        runOptions: 'script'
+        scriptPath: '$(deployScript)'
+        readyTimeout: '20000'
