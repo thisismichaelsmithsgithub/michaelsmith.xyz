@@ -27,19 +27,3 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
-
-- stage: DeployProduction
-  displayName: Deploy - Production
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - job: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: SSH@0
-      inputs:
-        sshEndpoint: '$(deploySshEndpoint)'
-        runOptions: 'script'
-        scriptPath: '$(deployScript)'
-        readyTimeout: '20000'
