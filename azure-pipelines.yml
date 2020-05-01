@@ -40,6 +40,6 @@ stages:
     - task: SSH@0
       inputs:
         sshEndpoint: '$(deploySshEndpoint)'
-        runOptions: 'script'
-        scriptPath: '$(deployScript)'
+        runOptions: 'commands'
+        commands: 'bash $(deployScript)'
         readyTimeout: '20000'
