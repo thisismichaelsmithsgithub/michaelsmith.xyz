@@ -5,9 +5,9 @@ resources:
 - repo: self
 
 variables:
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/head/master') }}:
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     tag: 'master'
-  ${{ if ne(variables['Build.SourceBranch'], 'refs/head/master') }}:
+  ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     tag: '$(Build.SourceVersion)'
 
 stages:
