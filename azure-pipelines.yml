@@ -34,8 +34,9 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: InstallSSHKey@0
+    - task: SSH@0
       inputs:
-        knownHostsEntry: '$(knownHostsEntry)'
-        sshPublicKey: '$(sshPublicKey)'
-        sshKeySecureFile: '$(sshKeySecureFile)'
+        sshEndpoint: '$(deplaySshEndpoint)'
+        runOptions: 'script'
+        scriptPath: '$(deployScript)'
+        readyTimeout: '20000'
