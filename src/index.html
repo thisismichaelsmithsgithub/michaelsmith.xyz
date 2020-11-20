@@ -1,46 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class='h-full'>
 
     <head>
-        <title>Michael Smith</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/brands.css"
-            integrity="sha384-n9+6/aSqa9lBidZMRCQHTHKJscPq6NW4pCQBiMmHdUCvPN8ZOg2zJJTkC7WIezWv" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/fontawesome.css"
-            integrity="sha384-vd1e11sR28tEK9YANUtpIOdjGW14pS87bUBuOIoBILVWLFnS+MCX9T6MMf0VdPGq" crossorigin="anonymous">
+        <title>Michael Smith</title>
 
-        <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
     </head>
 
-    <body>
-        <header>
-            <h1>
-                <img class="profile-image" src="/files/me-circle.png" alt="Profile Image" />
+    <body class="flex flex-col justify-start items-center w-full h-full container mx-auto font-sans bg-gray-50 text-gray-700">
+        <header class='mt-52 font-display'>
+            <h1 class="font-medium text-5xl sm:text-7xl mb-8 sm:flex sm:flex-row sm:items-center text-center">
+                <img class="hidden lg:inline-block w-32 h-32 -ml-40 mr-8" src="./static/me-circle.png" alt="Profile Image" />
                 Michael Smith
             </h1>
             <nav>
-                <ul>
-                    <li><a class="mail-link" href="mailto:me@michaelsmith.xyz">me@michaelsmith.xyz</a></li>
+                <ul class='list-none flex flex-col items-center sm:flex-row sm:justify-center text-xl'>
                     <li>
-                        <a class="github-link" href="https://github.com/michaelsmithxyz">
+                        <a class="no-underline hover:text-blue-500" href="mailto:me@michaelsmith.xyz">me@michaelsmith.xyz</a>
+                        <span class='ml-2 hidden sm:inline'>•</span>
+                    </li>
+                    <li class="mt-6 sm:mt-0 sm:ml-3 sm:inline-flex sm:items-center">
+                        <a class="no-underline sm:text-3xl hover:text-blue-500"" href="https://github.com/michaelsmithxyz">
                             <i class="fab fa-github-square"></i>
-                            <span class="responsive-link-text">GitHub</span>
+                            <span class="sm:hidden">GitHub</span>
                         </a>
+
+                        <span class='ml-3 hidden sm:inline'>•</span>
                     </li>
-                    <li>
-                        <a class="linked-in-link" href="https://linkedin.com/in/michaelsmithxyz">
+                    <li class="mt-6 sm:mt-0 sm:ml-3 sm:inline-flex sm:items-center">
+                        <a class="no-underline sm:text-3xl hover:text-blue-500"" href="https://linkedin.com/in/michaelsmithxyz">
                             <i class="fab fa-linkedin"></i>
-                            <span class="responsive-link-text">LinkedIn</span>
+                            <span class="sm:hidden">LinkedIn</span>
+                        </a>
+
+                        <span class='hidden sm:inline ml-3'>•</span>
+                    </li>
+                    <li class="mt-6 sm:mt-0 sm:ml-3 sm:inline-flex sm:items-center">
+                        <a class="font-medium p-1 border border-solid border-blue-500 text-blue-500 hover:text-blue-600 hover:border-blue-600 rounded-md" href="./static/resume-michael-smith-current.pdf">
+                            Résumé
                         </a>
                     </li>
-                    <li><a class="resume-link" href="/files/resume-michael-smith-current.pdf">Résumé</a></li>
                 </ul>
             </nav>
         </header>
-        <footer>
-            © 2020 Michael Smith • <a href="https://github.com/michaelsmithxyz/michaelsmith.xyz">Source on GitHub</a>
+        <footer class="mt-auto flex-shrink-0 text-gray-300 mb-1 text-sm">
+            © 2020 Michael Smith • <a class="underline" href="https://github.com/michaelsmithxyz/michaelsmith.xyz">Source on GitHub</a>
         </footer>
     </body>
 
