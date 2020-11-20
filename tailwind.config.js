@@ -7,7 +7,7 @@ module.exports = {
     extend: {},
     fontFamily: {
       'sans': ['ui-sans-serif', 'system-ui'],
-      'display': ['Montserrat', 'ui-sans-serif', 'system-ui']
+      'display': ['Lato', 'ui-sans-serif', 'system-ui']
     }
   },
   variants: {
