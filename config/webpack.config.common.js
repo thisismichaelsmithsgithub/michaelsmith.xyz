@@ -1,13 +1,16 @@
 const path = require('path');
+
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const { srcDir, outputDir } = require('./paths');
+
 
 module.exports = {
-    mode: 'production',
-
-    entry: ['./src/index.js'],
+    entry: [path.resolve(srcDir, 'index.js')],
 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: outputDir,
         publicPath: '/',
         filename: 'app.bundle.js'
     },
@@ -21,19 +24,19 @@ module.exports = {
             {
                 test: /\.(pdf|gif|png|jpe?g|svg|eot|woff|woff2|ttf)$/,
                 use: [
-                  {
-                    loader: 'file-loader',
-                    options: {
-                      outputPath: 'static/',
-                      name: '[name].[ext]?[hash]'
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            outputPath: 'static/',
+                            name: '[name].[ext]?[hash]'
+                        },
                     },
-                  },
                 ],
             },
             {
                 test: /\.css$/,
                 use: [
-                    'style-loader',
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'postcss-loader'
                 ],
@@ -42,17 +45,11 @@ module.exports = {
     },
 
     plugins: [
+        new MiniCssExtractPlugin(),
+
         new HTMLWebpackPlugin({
             filename: 'index.html',
-            template: './src/index.html'
+            template: path.resolve(srcDir, 'index.html')
         })
-    ],
-
-    devServer: {
-        watchContentBase: true,
-        contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        port: 9000,
-        open: true
-    }
+    ]
 };
