@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-ARG configuration=Debug
+ARG configuration=Release
 WORKDIR /SmithDotPizza
 COPY *.csproj .
 RUN dotnet restore
