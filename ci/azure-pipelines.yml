@@ -24,7 +24,6 @@ stages:
           vmImage: "ubuntu-latest"
         steps:
           - bash: ci/scripts/michaelsmith.xyz/yarn-build.sh
-            workingDirectory: michaelsmith.xyz/
             displayName: Yarn build
           - task: Docker@2
             displayName: Build and push Docker image
