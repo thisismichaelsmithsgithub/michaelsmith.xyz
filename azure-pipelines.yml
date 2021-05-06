@@ -1,8 +1,10 @@
 trigger:
-  - '*'
+  branches:
+    exclude:
+      - master
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
@@ -10,24 +12,24 @@ variables:
       master
       $(Build.SourceVersion)
   ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/master') }}:
-    tags: '$(Build.SourceVersion)'
+    tags: "$(Build.SourceVersion)"
 
 stages:
-- stage: Build
-  displayName: Build and publish
-  jobs: 
-  - job: Build
-    displayName: Build and publish Docker image
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - script: yarn install
-    - script: yarn build
-    - task: Docker@2
-      displayName: Build and push Docker image
-      inputs:
-        containerRegistry: 'Docker Hub - michaelsmithxyz'
-        repository: '$(imageRepository)'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: '$(tags)'
+  - stage: Build
+    displayName: Build and publish
+    jobs:
+      - job: Build
+        displayName: Build and publish Docker image
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - script: yarn install
+          - script: yarn build
+          - task: Docker@2
+            displayName: Build and push Docker image
+            inputs:
+              containerRegistry: "Docker Hub - michaelsmithxyz"
+              repository: "$(imageRepository)"
+              command: "buildAndPush"
+              Dockerfile: "**/Dockerfile"
+              tags: "$(tags)"

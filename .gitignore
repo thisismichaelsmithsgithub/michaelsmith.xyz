@@ -1,5 +1,11 @@
 .DS_STORE
 .idea/
-dist/
+
+michaelsmith.xyz/dist/
+
+smith.pizza/*/bin
+smith.pizza/*/obj/
+smith.pizza/*/artifacts/
+
 node_modules/
 *.log
