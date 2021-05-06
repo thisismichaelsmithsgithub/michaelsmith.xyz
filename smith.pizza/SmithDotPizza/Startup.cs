@@ -62,6 +62,7 @@ namespace SmithDotPizza
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseFileServer();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

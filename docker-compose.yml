@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+    smith.pizza:
+        build:
+            context: ./smith.pizza/SmithDotPizza/
+            args:
+                configuration: Debug
+        ports:
+            - "8000:8000"
+        environment:
+            - DOTNET_ENVIRONMENT=Development
+            - Cache__Connection=redis
+            - Urls=http://0.0.0.0:8000
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"
