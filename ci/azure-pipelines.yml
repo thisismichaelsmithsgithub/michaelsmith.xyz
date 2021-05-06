@@ -23,13 +23,15 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         steps:
-          - script: yarn install
-          - script: yarn build
+          - bash: ci/scripts/michaelsmith.xyz/yarn-build.sh
+            workingDirectory: michaelsmith.xyz/
+            displayName: Yarn build
           - task: Docker@2
             displayName: Build and push Docker image
             inputs:
               containerRegistry: "Docker Hub - michaelsmithxyz"
               repository: "$(imageRepository)"
               command: "buildAndPush"
-              Dockerfile: "**/Dockerfile"
+              Dockerfile: michaelsmith.xyz/Dockerfile
+              buildContext: michaelsmith.xyz/
               tags: "$(tags)"
